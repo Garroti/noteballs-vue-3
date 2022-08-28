@@ -26,6 +26,15 @@
         :class="{ 'is-active': showModalNav }"
         ref="navbarRef"
       >
+        <div class="navbar-start">
+          <button
+            v-if="storeAuth.user.id"
+            @click="logout"
+            class="button is-small is-info mt-3 ml-3"
+          >
+            Log out {{ storeAuth.user.email }}
+          </button>
+        </div>
         <div class="navbar-end">
           <RouterLink
             @click="showModalNav = false"
@@ -52,6 +61,9 @@
 <script setup>
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { useStoreAuth } from "@/stores/storeAuth";
+
+const storeAuth = useStoreAuth();
 
 const showModalNav = ref(false);
 
@@ -67,6 +79,11 @@ onClickOutside(
     ignore: [navbarBurguerRef],
   }
 );
+
+const logout = () => {
+  showModalNav.value = false;
+  storeAuth.logoutUser();
+};
 </script>
 
 <style>
